@@ -6,13 +6,14 @@ public partial class Year2024Day3Task1 : IDailyTask
 {
     public string Execute(string input)
     {
-        var output = 0;
-        foreach (Match instruction in MulRegex().Matches(input))
-        {
-            output +=
-                int.Parse(instruction.Groups[1].Value) * int.Parse(instruction.Groups[2].Value);
-        }
-        return output.ToString();
+        return MulRegex()
+            .Matches(input)
+            .Aggregate(
+                0,
+                (acc, curr) =>
+                    acc + (int.Parse(curr.Groups[1].Value) * int.Parse(curr.Groups[2].Value))
+            )
+            .ToString();
     }
 
     [GeneratedRegex("mul\\((\\d+),(\\d+)\\)")]
