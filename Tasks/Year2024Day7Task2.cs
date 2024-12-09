@@ -2,17 +2,27 @@ namespace AdventOfCode.Tasks;
 
 public class Year2024Day7Task2 : IDailyTask
 {
+    private static ulong Pow(ulong a, ulong b)
+    {
+        ulong output = 1;
+        for (ulong i = 0; i < b; i++)
+        {
+            output *= a;
+        }
+        return output;
+    }
+
     private static bool IsResultPossible(ulong result, ulong[] numbers)
     {
         var operatorsCount = (ulong)numbers.Length - 1;
-        var variationsCount = Math.Pow(3, operatorsCount);
+        var variationsCount = Pow(3, operatorsCount);
 
         for (ulong i = 0; i < variationsCount; i++)
         {
             var operationResult = numbers[0];
             for (ulong j = 0; j < operatorsCount; j++)
             {
-                var operatorType = i / ((ulong)Math.Pow(3, j)) % 3;
+                var operatorType = i / Pow(3, j) % 3;
 
                 operationResult = operatorType switch
                 {
