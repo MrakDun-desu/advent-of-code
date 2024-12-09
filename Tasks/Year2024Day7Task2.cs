@@ -2,18 +2,38 @@ namespace AdventOfCode.Tasks;
 
 public class Year2024Day7Task2 : IDailyTask
 {
-    private static HashSet<ulong> GetPossibleResults(ulong state, ulong[] next)
+    private static bool IsResultPossible(ulong result, ulong[] numbers)
     {
-        if (next.Length == 0)
-        {
-            return [state];
-        }
+        var operatorsCount = (ulong)numbers.Length - 1;
+        var variationsCount = Math.Pow(3, operatorsCount);
 
-        var rest = next[1..];
-        var output = GetPossibleResults(state + next[0], rest);
-        output.UnionWith(GetPossibleResults(state * next[0], rest));
-        output.UnionWith(GetPossibleResults(ulong.Parse($"{state}{next[0]}"), rest));
-        return output;
+        for (ulong i = 0; i < variationsCount; i++)
+        {
+            var operationResult = numbers[0];
+            for (ulong j = 0; j < operatorsCount; j++)
+            {
+                var operatorType = i / ((ulong)Math.Pow(3, j)) % 3;
+
+                operationResult = operatorType switch
+                {
+                    0 => operationResult + numbers[j + 1],
+                    1 => operationResult * numbers[j + 1],
+                    2 => ulong.Parse($"{operationResult}{numbers[j + 1]}"),
+                    _ => throw new ArgumentOutOfRangeException(nameof(numbers)),
+                };
+
+                if (operationResult > result)
+                {
+                    break;
+                }
+            }
+
+            if (operationResult == result)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     public string Execute(string input)
@@ -27,7 +47,7 @@ public class Year2024Day7Task2 : IDailyTask
             var result = ulong.Parse(splitLine[0]);
             var numbers = splitLine[1].Split(' ').Select(ulong.Parse).ToArray();
 
-            if (GetPossibleResults(numbers[0], numbers[1..]).Contains(result))
+            if (IsResultPossible(result, numbers))
             {
                 sum += result;
             }
