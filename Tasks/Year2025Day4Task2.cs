@@ -22,6 +22,9 @@ public class Year2025Day4Task2 : IDailyTask {
             var removed = false;
             for (var y = 0; y < positions.Length; y++) {
                 for (var x = 0; x < positions[y].Length; x++) {
+                    if (positions[y][x] != 1) {
+                        continue;
+                    }
                     var adjacentFilledCount = adjacent
                         .Aggregate(0, (acc, adj) => {
                             var pos = adj + (x, y);
@@ -30,7 +33,7 @@ public class Year2025Day4Task2 : IDailyTask {
                             }
                             return acc + positions[pos.Y][pos.X];
                         });
-                    if (positions[y][x] == 1 && adjacentFilledCount < 4) {
+                    if (adjacentFilledCount < 4) {
                         positions[y][x] = 0;
                         movedCount++;
                         removed = true;
