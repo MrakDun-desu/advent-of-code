@@ -17,7 +17,7 @@ public class Year2025Day8Task1 : IDailyTask {
                 return output;
             }).ToList();
 
-        var distancesCount = circuits.Count * circuits.Count + 1;
+        var distancesCount = (circuits.Count * circuits.Count - circuits.Count) / 2;
         var distances = new List<(float Dist, PosRecord Start, PosRecord End)>(distancesCount);
         for (var i = 0; i < circuits.Count(); i++) {
             for (var j = i + 1; j < circuits.Count; j++) {
